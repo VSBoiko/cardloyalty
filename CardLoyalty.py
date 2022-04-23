@@ -2176,3 +2176,16 @@ class CardLoyaltySDK:
             params=dict(),
             data=integration
         )
+
+    def __validate(self, response, params):
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('error'):
+                print("status_code", response.status_code)
+                print("headers", self.headers)
+                print("params", params)
+                print("response", data)
+            else:
+                return data
+        else:
+            print(response.status_code, response.text)
