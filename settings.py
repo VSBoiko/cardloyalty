@@ -5,3 +5,4 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.environ.get("TOKEN")
+API = os.environ.get("API")
