@@ -1,12 +1,7 @@
-import json
 from datetime import datetime
 
 import CardLoyaltyBasic
 import CardLoyaltyBasket
-
-
-def dump(value):
-    print((json.dumps(value, indent=4, sort_keys=True)))
 
 
 class Order(CardLoyaltyBasic.Basic):
@@ -20,53 +15,89 @@ class Order(CardLoyaltyBasic.Basic):
                  deposit_add: float = 0.00,
                  deposit_write_off: float = 0.00,
                  ):
+        """
+        РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РѕР±СЉРµРєС‚Р° РєР»Р°СЃСЃР° Order
+
+        :param guid: ID С‚СЂР°РЅР·Р°РєС†РёРё
+        :param number: РЅРѕРјРµСЂ С‚СЂР°РЅР·Р°РєС†РёРё
+        :param date: РґР°С‚Р° С‚СЂР°РЅР·Р°РєС†РёРё
+        :param basket: РєРѕСЂР·РёРЅР° Р·Р°РєР°Р·Р°
+        :param bonus_add: РЅР°С‡РёСЃР»РµРЅРѕ Р±РѕРЅСѓСЃРѕРІ
+        :param bonus_write_off: СЃРїРёСЃР°РЅРѕ Р±РѕРЅСѓСЃРѕРІ
+        :param deposit_add: РїРѕРїРѕР»РЅРµРЅРёРµ РґРµРїРѕР·РёС‚Р°
+        :param deposit_write_off: СЃРїРёСЃР°РЅРёРµ СЃ РґРµРїРѕР·РёС‚Р°
+        """
         super().__init__()
+        self._basket = basket
         self._order = {
-            "guid": guid,    # ID транзакции
-            "number": number,    # Номер транзакции
-            "date": date.strftime("%Y-%m-%d %H:%M:%S"),    # Дата транзакции
-            "sum": basket.get_basket_price(),    # Сумма транзакции без скидки
-            "sumDiscount": basket.get_basket_price_with_discount(),    # Сумма транзакции со скидкой
-            "bonusAdd": round(bonus_add, 2),    # Начислено бонусов
-            "bonusWriteOff": round(bonus_write_off, 2),    # Списано бонусов
-            "depositAdd": round(deposit_add, 2),    # Пополнение депозита
-            "depositWriteOff": round(deposit_write_off, 2),    # Списание с депозита
+            "guid": guid,    # ID С‚СЂР°РЅР·Р°РєС†РёРё
+            "number": number,    # РќРѕРјРµСЂ С‚СЂР°РЅР·Р°РєС†РёРё
+            "date": date.strftime("%Y-%m-%d %H:%M:%S"),    # Р”Р°С‚Р° С‚СЂР°РЅР·Р°РєС†РёРё
+            "sum": basket.get_basket_price(),    # РЎСѓРјРјР° С‚СЂР°РЅР·Р°РєС†РёРё Р±РµР· СЃРєРёРґРєРё
+            "sumDiscount": basket.get_basket_price_with_discount(),    # РЎСѓРјРјР° С‚СЂР°РЅР·Р°РєС†РёРё СЃРѕ СЃРєРёРґРєРѕР№
+            "bonusAdd": round(bonus_add, 2),    # РќР°С‡РёСЃР»РµРЅРѕ Р±РѕРЅСѓСЃРѕРІ
+            "bonusWriteOff": round(bonus_write_off, 2),    # РЎРїРёСЃР°РЅРѕ Р±РѕРЅСѓСЃРѕРІ
+            "depositAdd": round(deposit_add, 2),    # РџРѕРїРѕР»РЅРµРЅРёРµ РґРµРїРѕР·РёС‚Р°
+            "depositWriteOff": round(deposit_write_off, 2),    # РЎРїРёСЃР°РЅРёРµ СЃ РґРµРїРѕР·РёС‚Р°
             "cart": basket.get_basket_for_order()
         }
 
+    def get_order_basket(self) -> CardLoyaltyBasket.Basket:
+        """
+        РџРѕР»СѓС‡РёС‚СЊ РєРѕСЂР·РёРЅСѓ Р·Р°РєР°Р·Р°
+
+        :return: РѕР±СЉРµРєС‚ РєР»Р°СЃСЃР° CardLoyaltyBasket.Basket
+        """
+        return self._basket
+
+    def get_order_price(self) -> float:
+        """
+        РџРѕР»СѓС‡РёС‚СЊ СЃС‚РѕРёРјРѕСЃС‚СЊ Р·Р°РєР°Р·Р°
+
+        :return: float
+        """
+        return self._order["sum"]
+
+    def get_order_price_with_discount(self) -> float:
+        """
+        РџРѕР»СѓС‡РёС‚СЊ СЃС‚РѕРёРјРѕСЃС‚СЊ Р·Р°РєР°Р·Р° СЃРѕ СЃРєРёРґРєРѕР№
+
+        :return: float
+        """
+        return self._order["sumDiscount"]
+
     def get_to_create_order(self) -> dict:
         """
-        Возвращает данные заказа в формате для создания заказа
+        Р’РѕР·РІСЂР°С‰Р°РµС‚ РґР°РЅРЅС‹Рµ Р·Р°РєР°Р·Р° РІ С„РѕСЂРјР°С‚Рµ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ Р·Р°РєР°Р·Р°
 
         :return:
-        Пример return:
-        Пример order:
+        РџСЂРёРјРµСЂ return:
         {
-            "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
-            "number": "005",    # Номер транзакции
-            "date": "2020-02-18 18:18:18",    # Дата транзакции
-            "sum": 1690,    # Сумма транзакции без скидки
-            "sumDiscount": 1690,    # Сумма транзакции со скидкой
-            "bonusAdd": "0",    # Начислено бонусов
-            "bonusWriteOff": "20",    # Списано бонусов
-            "depositAdd": "0",    # Пополнение депозита
-            "depositWriteOff": "20",    # Списание с депозита
+            "guid": "2-43F2-4148-A264-8787414DC88",    # ID С‚СЂР°РЅР·Р°РєС†РёРё
+            "number": "005",    # РќРѕРјРµСЂ С‚СЂР°РЅР·Р°РєС†РёРё
+            "date": "2020-02-18 18:18:18",    # Р”Р°С‚Р° С‚СЂР°РЅР·Р°РєС†РёРё
+            "sum": 1690,    # РЎСѓРјРјР° С‚СЂР°РЅР·Р°РєС†РёРё Р±РµР· СЃРєРёРґРєРё
+            "sumDiscount": 1690,    # РЎСѓРјРјР° С‚СЂР°РЅР·Р°РєС†РёРё СЃРѕ СЃРєРёРґРєРѕР№
+            "bonusAdd": "0",    # РќР°С‡РёСЃР»РµРЅРѕ Р±РѕРЅСѓСЃРѕРІ
+            "bonusWriteOff": "20",    # РЎРїРёСЃР°РЅРѕ Р±РѕРЅСѓСЃРѕРІ
+            "depositAdd": "0",    # РџРѕРїРѕР»РЅРµРЅРёРµ РґРµРїРѕР·РёС‚Р°
+            "depositWriteOff": "20",    # РЎРїРёСЃР°РЅРёРµ СЃ РґРµРїРѕР·РёС‚Р°
             "cart":
             [
                 {
-                    "nid": "36ACB48C-438D-F241",    # ID номенклатуры
-                    "groupId": "BEA57842-935",    # ID группы номенклатуры
-                    "groupName": "Стейки",    # Наименование группы номенклатуры
-                    "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
-                    "price": 1300,    # Стоимость номенклатуры
-                    "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
+                    "nid": "36ACB48C-438D-F241",    # ID РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹
+                    "groupId": "BEA57842-935",    # ID РіСЂСѓРїРїС‹ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹
+                    "groupName": "РЎС‚РµР№РєРё",    # РќР°РёРјРµРЅРѕРІР°РЅРёРµ РіСЂСѓРїРїС‹ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹
+                    "name": "РњРµРєСЃРёРєР°\/Р§РѕР№СЃ 240\/30РіСЂ",    # РќР°РёРјРµРЅРѕРІР°РЅРёРµ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹
+                    "price": 1300,    # РЎС‚РѕРёРјРѕСЃС‚СЊ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹
+                    "priceWithDiscount": 1300,    # РЎС‚РѕРёРјРѕСЃС‚СЊ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹ СЃ СѓС‡РµС‚РѕРј СЃРєРёРґРєРё
                 },
                 {
-                    "amount": 1    # Количество
+                    "amount": 1    # РљРѕР»РёС‡РµСЃС‚РІРѕ
                     "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
                     "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
-                    "groupName":"Салаты\/Закуски",
-                    "name":"Салат с розовыми помидорами и домашним сыром 270гр",
+                    "groupName":"РЎР°Р»Р°С‚С‹\/Р—Р°РєСѓСЃРєРё",
+                    "name":"РЎР°Р»Р°С‚ СЃ СЂРѕР·РѕРІС‹РјРё РїРѕРјРёРґРѕСЂР°РјРё Рё РґРѕРјР°С€РЅРёРј СЃС‹СЂРѕРј 270РіСЂ",
                     "price":390,
                     "priceWithDiscount":390,
                 }
