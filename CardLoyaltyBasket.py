@@ -241,27 +241,3 @@ class Basket(CardLoyaltyBasic.Basic):
             return True
         else:
             return False
-
-
-b = Basket()
-dump(b.get_basket_price())
-dump(b.get_basket_price_with_discount())
-b.add_item(
-    product_id="111",
-    name="Картошка",
-    amount=5,
-    price=10.0,
-    discount_price=0.0,
-)
-b.add_item(
-    product_id="22",
-    name="Морковка",
-    amount=2,
-    price=15.17,
-    discount_price=0.0,
-)
-
-dump(b.get_basket_for_order())
-dump(b.get_basket_price())
-dump(b.get_basket_price_with_discount())
-
