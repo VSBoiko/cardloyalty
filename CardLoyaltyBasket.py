@@ -1,29 +1,4 @@
-import json
-
 import CardLoyaltyBasic
-from functions import dump
-
-
-# "cart":
-# [
-#     {
-#         "nid": "36ACB48C-438D-F241",    # ID номенклатуры
-#         "groupId": "BEA57842-935",    # ID группы номенклатуры
-#         "groupName": "Стейки",    # Наименование группы номенклатуры
-#         "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
-#         "price": 1300,    # Стоимость номенклатуры
-#         "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
-#     },
-#     {
-#         "amount": 1    # Количество
-#         "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
-#         "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
-#         "groupName":"Салаты\/Закуски",
-#         "name":"Салат с розовыми помидорами и домашним сыром 270гр",
-#         "price":390,
-#         "priceWithDiscount":390,
-#     }
-# ]
 
 
 class Basket(CardLoyaltyBasic.Basic):
