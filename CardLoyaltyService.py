@@ -1,10 +1,4 @@
-import json
-
 import CardLoyaltyBasic
-
-
-def dump(value):
-    print((json.dumps(value, indent=4, sort_keys=True)))
 
 
 class Service(CardLoyaltyBasic.Basic):
@@ -13,16 +7,16 @@ class Service(CardLoyaltyBasic.Basic):
 
     def add_tag(self, tag_name: str) -> dict:
         """
-        Создать тег
+        РЎРѕР·РґР°С‚СЊ С‚РµРі
 
-        :param tag_name: название тега
+        :param tag_name: РЅР°Р·РІР°РЅРёРµ С‚РµРіР°
 
         :return:
-        Пример return:
+        РџСЂРёРјРµСЂ return:
         {
-            "name": "Пушкинская",    # наименование тега
-            "id": "2",    # id тега
-            "status": "exists"    # exists – тег существует, new – тег создан
+            "name": "РџСѓС€РєРёРЅСЃРєР°СЏ",    # РЅР°РёРјРµРЅРѕРІР°РЅРёРµ С‚РµРіР°
+            "id": "2",    # id С‚РµРіР°
+            "status": "exists"    # exists вЂ“ С‚РµРі СЃСѓС‰РµСЃС‚РІСѓРµС‚, new вЂ“ С‚РµРі СЃРѕР·РґР°РЅ
         }
         """
         return self._create_tags(
@@ -31,14 +25,14 @@ class Service(CardLoyaltyBasic.Basic):
 
     def get_all_tags(self) -> list:
         """
-        Получить список тегов
+        РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє С‚РµРіРѕРІ
 
         :return:
-        Пример return:
+        РџСЂРёРјРµСЂ return:
         [
             {
-                "tagId": 123,   # ID тегa
-                "tagName": "Москва"   # наименование тега
+                "tagId": 123,   # ID С‚РµРіa
+                "tagName": "РњРѕСЃРєРІР°"   # РЅР°РёРјРµРЅРѕРІР°РЅРёРµ С‚РµРіР°
             },
             {
                 "tagId": 124,
@@ -54,33 +48,33 @@ class Service(CardLoyaltyBasic.Basic):
 
     def get_all_templates(self) -> dict:
         """
-        Получить список макетов
+        РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РјР°РєРµС‚РѕРІ
 
         :return:
-        Пример return:
+        РџСЂРёРјРµСЂ return:
         {
-            "id": "4",    # ID Макета
-            "name": "Скидка 5%"    # Наименование макета
+            "id": "4",    # ID РњР°РєРµС‚Р°
+            "name": "РЎРєРёРґРєР° 5%"    # РќР°РёРјРµРЅРѕРІР°РЅРёРµ РјР°РєРµС‚Р°
         },
         {
             "id": "16",
-            "name": "Скидка 10%"
+            "name": "РЎРєРёРґРєР° 10%"
         },
         {
             "id": "18",
-            "name": "Бонусный макет"
+            "name": "Р‘РѕРЅСѓСЃРЅС‹Р№ РјР°РєРµС‚"
         }
         """
         return self._get_templates()
 
     def get_tag_name(self, tag_id: int) -> str:
         """
-        Получить наименование тега
+        РџРѕР»СѓС‡РёС‚СЊ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ С‚РµРіР°
 
-        :param tag_id: ID тега
+        :param tag_id: ID С‚РµРіР°
 
         :return:
-        Пример return: "Москва -10%"
+        РџСЂРёРјРµСЂ return: "РњРѕСЃРєРІР° -10%"
         """
         tag = self._get_tag(tag_id)
         if "tagName" in tag:
@@ -90,14 +84,14 @@ class Service(CardLoyaltyBasic.Basic):
 
     def send_sms(self, client_id: int, message: str, unix_time: str) -> bool:
         """
-        Отправить SMS
+        РћС‚РїСЂР°РІРёС‚СЊ SMS
 
-        :param client_id: ID клиента в CARDLOYALTY, карту которого нужно отправить по SMS
-        :param message: текст SMS сообщения, где %LINK% - ссылка на карт
-        :param unix_time: время отправки в формате Unixtime (например, 1543415640)
+        :param client_id: ID РєР»РёРµРЅС‚Р° РІ CARDLOYALTY, РєР°СЂС‚Сѓ РєРѕС‚РѕСЂРѕРіРѕ РЅСѓР¶РЅРѕ РѕС‚РїСЂР°РІРёС‚СЊ РїРѕ SMS
+        :param message: С‚РµРєСЃС‚ SMS СЃРѕРѕР±С‰РµРЅРёСЏ, РіРґРµ %LINK% - СЃСЃС‹Р»РєР° РЅР° РєР°СЂС‚
+        :param unix_time: РІСЂРµРјСЏ РѕС‚РїСЂР°РІРєРё РІ С„РѕСЂРјР°С‚Рµ Unixtime (РЅР°РїСЂРёРјРµСЂ, 1543415640)
 
         :return:
-        Пример return:
+        РџСЂРёРјРµСЂ return:
         {
             "response": ok
         }
@@ -122,15 +116,15 @@ class Service(CardLoyaltyBasic.Basic):
 
     def update_vars(self, client_id: int, variables: dict):
         """
-        Обновление переменныx
+        РћР±РЅРѕРІР»РµРЅРёРµ РїРµСЂРµРјРµРЅРЅС‹x
 
-        :param client_id: ID клиента
-        :param variables: список переменных (всего 15 - от var1 до var15)
-        Пример variables:
+        :param client_id: ID РєР»РёРµРЅС‚Р°
+        :param variables: СЃРїРёСЃРѕРє РїРµСЂРµРјРµРЅРЅС‹С… (РІСЃРµРіРѕ 15 - РѕС‚ var1 РґРѕ var15)
+        РџСЂРёРјРµСЂ variables:
         {
-            "var1": "100 рублей",    # Переменная (всего 15)
+            "var1": "100 СЂСѓР±Р»РµР№",    # РџРµСЂРµРјРµРЅРЅР°СЏ (РІСЃРµРіРѕ 15)
             "var2": "10%",
-            "var3": "Текст выводимый в переменную",
+            "var3": "РўРµРєСЃС‚ РІС‹РІРѕРґРёРјС‹Р№ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ",
             "var4": "",
             "var5": "",
             "var6": "",
@@ -146,7 +140,7 @@ class Service(CardLoyaltyBasic.Basic):
         }
 
         :return:
-        Пример return:
+        РџСЂРёРјРµСЂ return:
         {
             "response": ok
         }
