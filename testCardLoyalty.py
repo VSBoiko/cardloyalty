@@ -1,11 +1,13 @@
 from datetime import datetime
+import time
 
 from CardLoyaltyBasket import Basket
 from CardLoyaltyOrder import Order
 from CardLoyaltyService import Service
+from CardLoyaltyOrganization import Organization
 from functions import dump
 
-test = "Service"
+test = "Organization"
 
 if test == "Basket":
     new_basket = Basket()
@@ -153,3 +155,84 @@ elif test == "Service":
     dump(new_tag)
     dump(test_service.get_all_tags())
 
+    # СМС
+    res = test_service.send_sms(
+        380278,
+        "test",
+        int(time.time())
+    )
+    print("\nСМС")
+    dump(res)
+elif test == "Organization":
+    organizat = Organization()
+
+    test_client = {
+        "cardBarcode": "1040482",
+        "cardNumber": "1040482",
+        "clientId": "377308",
+        "phone": "79165449909"
+    }
+
+    # Получить клиентов
+    all_clients = organizat.get_all_clients(1, 10)
+    new_clients = organizat.get_new_clients(1)
+    print("\nКлиенты")
+    print("\nВсе клиенты:")
+    dump(all_clients)
+    print("\nНовые клиенты:")
+    dump(new_clients)
+    print("\nКлиент по ID:")
+    cl_id = int(test_client.get("clientId"))
+    dump(organizat.get_client_by_id(cl_id))
+    print("\nКлиент по баркоду:")
+    cl_barcode = test_client.get("cardBarcode")
+    dump(organizat.get_client_by_barcode(cl_barcode))
+    print("\nКлиент по номеру карты:")
+    cl_card = test_client.get("cardBarcode")
+    dump(organizat.get_client_by_card(cl_card))
+    print("\nКлиент по телефону:")
+    cl_phone = test_client.get("phone")
+    dump(organizat.get_client_by_phone(cl_phone))
+
+    # # Регистрация
+    # reg = organizat.registration(
+    #     id="6v8-y4hsjg-n45try",
+    #     name="Василек",
+    #     plugin_version="8.0",
+    #     soft_name="1C:Розница",
+    #     soft_version="8.6.3"
+    # )
+    # print("\nРегистрация")
+    # dump(reg)
+    #
+    # # Интеграция
+    # integ = organizat.update_integration(
+    #     soft_name="НазваниеПО",
+    #     soft_version="1.1.1",
+    #     unloading_new_clients="1.1.1",
+    #     loading_types_cards="1.1.1",
+    #     loading_new_clients="1.1.1",
+    #     synchronization_order="1.1.1"
+    # )
+    # print("\nИнтеграция")
+    # dump(integ)
+
+    # Новый клиент
+    # add_cl = organizat.add_client(
+    #     first_name="Нестеренко",
+    #     last_name="Николай",
+    #     phone="79288828409",
+    #     card_number="281340",
+    #     card_barcode="281340",
+    # )
+    # print("\nНовый клиент")
+    # dump(add_cl)
+
+    # add_cl:
+    # {
+    #     "cardBarcode": "281340",
+    #     "cardNumber": "281340",
+    #     "clientId": 380278,
+    #     "hash": "49ccc8ab45392bda8fa0cf809bb5e123",
+    #     "phone": "7777777777"
+    # }
