@@ -1045,7 +1045,7 @@ class Request:
     def __validate(self, response, params):
         if response.status_code == 200:
             data = response.json()
-            if data.get('error'):
+            if "error" in data and data.get("error"):
                 print("status_code", response.status_code)
                 print("headers", self.headers)
                 print("params", params)
