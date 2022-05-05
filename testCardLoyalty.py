@@ -2,9 +2,10 @@ from datetime import datetime
 
 from CardLoyaltyBasket import Basket
 from CardLoyaltyOrder import Order
+from CardLoyaltyService import Service
 from functions import dump
 
-test = "Order"
+test = "Service"
 
 if test == "Basket":
     new_basket = Basket()
@@ -120,3 +121,35 @@ elif test == "Order":
 
     print("\nКорзина заказа")
     dump(order_basket.get_basket())
+elif test == "Service":
+    test_service = Service()
+
+    # Получить все теги
+    all_tags = test_service.get_all_tags()
+
+    print("Получить все теги")
+    dump(all_tags)
+
+
+    # Получить название тега
+    tag_id = 1458
+    tag_name = test_service.get_tag_name(tag_id)
+
+    print("Название тега с ID", tag_id)
+    print(tag_name)
+
+
+    # Получить все шаблоны
+    all_templates = test_service.get_all_templates()
+
+    print("Получить все шаблоны")
+    dump(all_templates)
+
+
+    # Добавить тег
+    new_tag = test_service.add_tag("test tag")
+
+    print("Добавить тег")
+    dump(new_tag)
+    dump(test_service.get_all_tags())
+
