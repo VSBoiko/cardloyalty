@@ -5,10 +5,6 @@ import CardLoyaltyBasic
 import CardLoyaltyOrder
 
 
-def dump(value):
-    print((json.dumps(value, indent=4, sort_keys=True)))
-
-
 class Organization(CardLoyaltyBasic.Basic):
     def __init__(self):
         super().__init__()
@@ -658,705 +654,656 @@ class Organization(CardLoyaltyBasic.Basic):
 
 
     # WIP
-    def _update_order_by_client_id(self, client_id: int, order: CardLoyaltyOrder.Order) -> dict:
-        """
-        Обновить заказ по ID клиента
-
-        :param client_id: ID клиента
-        :param order: параметры заказа
-        Пример order:
-        {
-            "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
-            "number": "005",    # Номер транзакции
-            "date": "2020-02-18 18:18:18",    # Дата транзакции
-            "sum": 1690,    # Сумма транзакции без скидки
-            "sumDiscount": 1690,    # Сумма транзакции со скидкой
-            "bonusAdd": "0",    # Начислено бонусов
-            "bonusWriteOff": "20",    # Списано бонусов
-            "depositAdd": "0",    # Пополнение депозита
-            "depositWriteOff": "20",    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "36ACB48C-438D-F241",    # ID номенклатуры
-                    "groupId": "BEA57842-935",    # ID группы номенклатуры
-                    "groupName": "Стейки",    # Наименование группы номенклатуры
-                    "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
-                    "price": 1300,    # Стоимость номенклатуры
-                    "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
-                },
-                {
-                    "amount": 1    # Количество
-                    "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
-                    "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
-                    "groupName":"Салаты\/Закуски",
-                    "name":"Салат с розовыми помидорами и домашним сыром 270гр",
-                    "price":390,
-                    "priceWithDiscount":390,
-                }
-            ]
-        }
-        :return:
-        Пример return:
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._update_order(
-            type="clientId",
-            id=str(client_id),
-            order=order
-        )
-
-    def _update_order_by_card_barcode(self, card_barcode: str, order: CardLoyaltyOrder.Order) -> dict:
-        """
-        Обновить заказ по токену / баркоду карты
-
-        :param card_barcode: токен / баркод карты
-        :param order: параметры заказа
-        Пример order:
-        {
-            "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
-            "number": "005",    # Номер транзакции
-            "date": "2020-02-18 18:18:18",    # Дата транзакции
-            "sum": 1690,    # Сумма транзакции без скидки
-            "sumDiscount": 1690,    # Сумма транзакции со скидкой
-            "bonusAdd": "0",    # Начислено бонусов
-            "bonusWriteOff": "20",    # Списано бонусов
-            "depositAdd": "0",    # Пополнение депозита
-            "depositWriteOff": "20",    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "36ACB48C-438D-F241",    # ID номенклатуры
-                    "groupId": "BEA57842-935",    # ID группы номенклатуры
-                    "groupName": "Стейки",    # Наименование группы номенклатуры
-                    "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
-                    "price": 1300,    # Стоимость номенклатуры
-                    "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
-                },
-                {
-                    "amount": 1    # Количество
-                    "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
-                    "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
-                    "groupName":"Салаты\/Закуски",
-                    "name":"Салат с розовыми помидорами и домашним сыром 270гр",
-                    "price":390,
-                    "priceWithDiscount":390,
-                }
-            ]
-        }
-        :return:
-        Пример return:
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._update_order(
-            type="cardBarcode",
-            id=card_barcode,
-            order=order
-        )
-
-    def _update_order_by_card_number(self, card_number: str, order: CardLoyaltyOrder.Order) -> dict:
-        """
-        Обновить заказ по номеру карты
-
-        :param card_number: номер карты
-        :param order: параметры заказа
-        Пример order:
-        {
-            "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
-            "number": "005",    # Номер транзакции
-            "date": "2020-02-18 18:18:18",    # Дата транзакции
-            "sum": 1690,    # Сумма транзакции без скидки
-            "sumDiscount": 1690,    # Сумма транзакции со скидкой
-            "bonusAdd": "0",    # Начислено бонусов
-            "bonusWriteOff": "20",    # Списано бонусов
-            "depositAdd": "0",    # Пополнение депозита
-            "depositWriteOff": "20",    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "36ACB48C-438D-F241",    # ID номенклатуры
-                    "groupId": "BEA57842-935",    # ID группы номенклатуры
-                    "groupName": "Стейки",    # Наименование группы номенклатуры
-                    "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
-                    "price": 1300,    # Стоимость номенклатуры
-                    "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
-                },
-                {
-                    "amount": 1    # Количество
-                    "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
-                    "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
-                    "groupName":"Салаты\/Закуски",
-                    "name":"Салат с розовыми помидорами и домашним сыром 270гр",
-                    "price":390,
-                    "priceWithDiscount":390,
-                }
-            ]
-        }
-        :return:
-        Пример return:
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._update_order(
-            type="cardNumber",
-            id=card_number,
-            order=order
-        )
-
-    def _update_order_by_phone(self, phone: str, order: CardLoyaltyOrder.Order) -> dict:
-        """
-        Обновить заказ по телефону
-
-        :param phone: номер телефона
-        :param order: параметры заказа
-        Пример order:
-        {
-            "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
-            "number": "005",    # Номер транзакции
-            "date": "2020-02-18 18:18:18",    # Дата транзакции
-            "sum": 1690,    # Сумма транзакции без скидки
-            "sumDiscount": 1690,    # Сумма транзакции со скидкой
-            "bonusAdd": "0",    # Начислено бонусов
-            "bonusWriteOff": "20",    # Списано бонусов
-            "depositAdd": "0",    # Пополнение депозита
-            "depositWriteOff": "20",    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "36ACB48C-438D-F241",    # ID номенклатуры
-                    "groupId": "BEA57842-935",    # ID группы номенклатуры
-                    "groupName": "Стейки",    # Наименование группы номенклатуры
-                    "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
-                    "price": 1300,    # Стоимость номенклатуры
-                    "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
-                },
-                {
-                    "amount": 1    # Количество
-                    "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
-                    "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
-                    "groupName":"Салаты\/Закуски",
-                    "name":"Салат с розовыми помидорами и домашним сыром 270гр",
-                    "price":390,
-                    "priceWithDiscount":390,
-                }
-            ]
-        }
-        :return:
-        Пример return:
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._update_order(
-            type="phone",
-            id=phone,
-            order=order
-        )
-
-
-    def _update_return_cart_by_client_id(self, client_id: int, cart: dict) -> dict:
-        """
-        Возврат товара по ID клиента
-
-        :param client_id: ID клиента
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
-                    "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
-                    "groupName": "Лимонады соб.\/пр-ва",
-                    "name": "Лимонад Малина-Маракуйя 400мл",
-                    "price": 200,
-                    "priceWithDiscount": 150,
-                    "amount": 1.0
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id транзакции
-            }
-        }
-        """
-        return self._update_return_cart(
-            type="clientId",
-            id=str(client_id),
-            cart=cart
-        )
-
-    def _update_return_cart_by_card_barcode(self, card_barcode: str, cart: dict) -> dict:
-        """
-        Возврат товара по токену / баркоду карты
-
-        :param card_barcode: токен / баркод карты
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
-                    "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
-                    "groupName": "Лимонады соб.\/пр-ва",
-                    "name": "Лимонад Малина-Маракуйя 400мл",
-                    "price": 200,
-                    "priceWithDiscount": 150,
-                    "amount": 1.0
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id транзакции
-            }
-        }
-        """
-        return self._update_return_cart(
-            type="cardBarcode",
-            id=card_barcode,
-            cart=cart
-        )
-
-    def _update_return_cart_by_card_number(self, card_number: str, cart: dict) -> dict:
-        """
-        Возврат товара по номеру карты
-
-        :param card_number: номер карты
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
-                    "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
-                    "groupName": "Лимонады соб.\/пр-ва",
-                    "name": "Лимонад Малина-Маракуйя 400мл",
-                    "price": 200,
-                    "priceWithDiscount": 150,
-                    "amount": 1.0
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id транзакции
-            }
-        }
-        """
-        return self._update_return_cart(
-            type="cardNumber",
-            id=card_number,
-            cart=cart
-        )
-
-    def _update_return_cart_by_phone(self, phone: str, cart: dict) -> dict:
-        """
-        Возврат товара по телефону
-
-        :param phone: номер телефона
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
-                    "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
-                    "groupName": "Лимонады соб.\/пр-ва",
-                    "name": "Лимонад Малина-Маракуйя 400мл",
-                    "price": 200,
-                    "priceWithDiscount": 150,
-                    "amount": 1.0
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id транзакции
-            }
-        }
-        """
-        return self._update_return_cart(
-            type="phone",
-            id=phone,
-            cart=cart
-        )
-
-
-    def _return_cart_by_client_id(self, client_id: int, cart: dict) -> dict:
-        """
-        Возврат товара по ID клиента
-
-        :param client_id: ID клиента
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "124",
-                    "groupId": "145",
-                    "groupName": "Мороженное",
-                    "name": "Мороженка",
-                    "price": 900.00,
-                    "priceWithDiscount": 900.00,
-                    "amount": 0.51
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._return_cart(
-            type="clientId",
-            id=str(client_id),
-            cart=cart
-        )
-
-    def _return_cart_by_card_barcode(self, card_barcode: str, cart: dict) -> dict:
-        """
-        Возврат товара по токену / баркоду карты
-
-        :param card_barcode: токен / баркод карты
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "124",
-                    "groupId": "145",
-                    "groupName": "Мороженное",
-                    "name": "Мороженка",
-                    "price": 900.00,
-                    "priceWithDiscount": 900.00,
-                    "amount": 0.51
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._return_cart(
-            type="cardBarcode",
-            id=card_barcode,
-            cart=cart
-        )
-
-    def _return_cart_by_card_number(self, card_number: str, cart: dict) -> dict:
-        """
-        Возврат товара по номеру карты
-
-        :param card_number: номер карты
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "124",
-                    "groupId": "145",
-                    "groupName": "Мороженное",
-                    "name": "Мороженка",
-                    "price": 900.00,
-                    "priceWithDiscount": 900.00,
-                    "amount": 0.51
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._return_cart(
-            type="cardNumber",
-            id=card_number,
-            cart=cart
-        )
-
-    def _return_cart_by_phone(self, phone: str, cart: dict) -> dict:
-        """
-        Возврат товара по телефону
-
-        :param phone: номер телефона
-        :param cart: параметры товара
-        Пример cart:
-        {
-            "guid": "123",    # ID возврата
-            "number": "213",    # Номер возврата
-            "date": "2018-01-01 00:00:00",    # Дата возврата
-            "sum": 1200.00,    # Сумма возврата без скидки
-            "sumDiscount": 1100.00,    # Сумма возврата со скидкой
-            "bonusAdd": 200.00,    # Начислено бонусов
-            "bonusWriteOff": 200.00,    # Списано бонусов
-            "depositAdd": 0.00,    # Пополнение депозита
-            "depositWriteOff": 0.00,    # Списание с депозита
-            "cart":
-            [
-                {
-                    "nid": "123",    # ID номенклатуры
-                    "groupId": "145",    # ID группы номенклатуры
-                    "groupName": "Печенье",    # Наименование группы номенклатуры
-                    "name": "Печенька",    # Наименование номенклатуры
-                    "price": 100.00,    # Стоимость номенклатуры
-                    "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
-                    "amount": 1.0    # Количество
-                },
-                {
-                    "nid": "124",
-                    "groupId": "145",
-                    "groupName": "Мороженное",
-                    "name": "Мороженка",
-                    "price": 900.00,
-                    "priceWithDiscount": 900.00,
-                    "amount": 0.51
-                }
-            ]
-        }
-
-        :return:
-        Пример return
-        {
-            "response":
-            {
-                "guid": "123"    # id возврата
-            }
-        }
-        """
-        return self._return_cart(
-            type="phone",
-            id=phone,
-            cart=cart
-        )
-
-
-
-
-test = Organization()
-# all_clients = test.get_all_clients(1, 1000000)
-# dump(len(all_clients))
-# dump(all_clients)
-# dump(test.get_client_by_id(377308)["phone"])
-# dump(test.get_client_by_barcode("1040482")["phone"])
-# dump(test.get_client_by_card("1040482")["phone"])
-# dump(test.get_client_by_phone("78789"))
-
-# new_clients = test.get_new_clients(1)
-# dump(len(new_clients))
-# dump(new_clients)
-
-# reg = test.registration(
-#     id="6v8-y4hsjg-n45try",
-#     name="Василек",
-#     plugin_version="8.0",
-#     soft_name="1C:Розница",
-#     soft_version="8.6.3"
-# )
-# dump(reg)
-
-# integ = test.update_integration(
-#     soft_name="НазваниеПО",
-#     soft_version="1.1.1",
-#     unloading_new_clients="1.1.1",
-#     loading_types_cards="1.1.1",
-#     loading_new_clients="1.1.1",
-#     synchronization_order="1.1.1"
-# )
-# dump(integ)
-
-# t = test.add_client(
-#     first_name="Клим",
-#     last_name="Саныч",
-#     phone="787545645647",
-#     card_number="444545",
-#     card_barcode="774587",
-# )
-# dump(t)
-
-# "cardBarcode": "1040482",
-# "cardNumber": "1040482",
-# "clientId": "377308"
-# "phone": "79165449909"
+    # def _update_order_by_client_id(self, client_id: int, order: CardLoyaltyOrder.Order) -> dict:
+    #     """
+    #     Обновить заказ по ID клиента
+    #
+    #     :param client_id: ID клиента
+    #     :param order: параметры заказа
+    #     Пример order:
+    #     {
+    #         "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
+    #         "number": "005",    # Номер транзакции
+    #         "date": "2020-02-18 18:18:18",    # Дата транзакции
+    #         "sum": 1690,    # Сумма транзакции без скидки
+    #         "sumDiscount": 1690,    # Сумма транзакции со скидкой
+    #         "bonusAdd": "0",    # Начислено бонусов
+    #         "bonusWriteOff": "20",    # Списано бонусов
+    #         "depositAdd": "0",    # Пополнение депозита
+    #         "depositWriteOff": "20",    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "36ACB48C-438D-F241",    # ID номенклатуры
+    #                 "groupId": "BEA57842-935",    # ID группы номенклатуры
+    #                 "groupName": "Стейки",    # Наименование группы номенклатуры
+    #                 "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
+    #                 "price": 1300,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
+    #             },
+    #             {
+    #                 "amount": 1    # Количество
+    #                 "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
+    #                 "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
+    #                 "groupName":"Салаты\/Закуски",
+    #                 "name":"Салат с розовыми помидорами и домашним сыром 270гр",
+    #                 "price":390,
+    #                 "priceWithDiscount":390,
+    #             }
+    #         ]
+    #     }
+    #     :return:
+    #     Пример return:
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._update_order(
+    #         type="clientId",
+    #         id=str(client_id),
+    #         order=order
+    #     )
+    #
+    # def _update_order_by_card_barcode(self, card_barcode: str, order: CardLoyaltyOrder.Order) -> dict:
+    #     """
+    #     Обновить заказ по токену / баркоду карты
+    #
+    #     :param card_barcode: токен / баркод карты
+    #     :param order: параметры заказа
+    #     Пример order:
+    #     {
+    #         "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
+    #         "number": "005",    # Номер транзакции
+    #         "date": "2020-02-18 18:18:18",    # Дата транзакции
+    #         "sum": 1690,    # Сумма транзакции без скидки
+    #         "sumDiscount": 1690,    # Сумма транзакции со скидкой
+    #         "bonusAdd": "0",    # Начислено бонусов
+    #         "bonusWriteOff": "20",    # Списано бонусов
+    #         "depositAdd": "0",    # Пополнение депозита
+    #         "depositWriteOff": "20",    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "36ACB48C-438D-F241",    # ID номенклатуры
+    #                 "groupId": "BEA57842-935",    # ID группы номенклатуры
+    #                 "groupName": "Стейки",    # Наименование группы номенклатуры
+    #                 "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
+    #                 "price": 1300,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
+    #             },
+    #             {
+    #                 "amount": 1    # Количество
+    #                 "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
+    #                 "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
+    #                 "groupName":"Салаты\/Закуски",
+    #                 "name":"Салат с розовыми помидорами и домашним сыром 270гр",
+    #                 "price":390,
+    #                 "priceWithDiscount":390,
+    #             }
+    #         ]
+    #     }
+    #     :return:
+    #     Пример return:
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._update_order(
+    #         type="cardBarcode",
+    #         id=card_barcode,
+    #         order=order
+    #     )
+    #
+    # def _update_order_by_card_number(self, card_number: str, order: CardLoyaltyOrder.Order) -> dict:
+    #     """
+    #     Обновить заказ по номеру карты
+    #
+    #     :param card_number: номер карты
+    #     :param order: параметры заказа
+    #     Пример order:
+    #     {
+    #         "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
+    #         "number": "005",    # Номер транзакции
+    #         "date": "2020-02-18 18:18:18",    # Дата транзакции
+    #         "sum": 1690,    # Сумма транзакции без скидки
+    #         "sumDiscount": 1690,    # Сумма транзакции со скидкой
+    #         "bonusAdd": "0",    # Начислено бонусов
+    #         "bonusWriteOff": "20",    # Списано бонусов
+    #         "depositAdd": "0",    # Пополнение депозита
+    #         "depositWriteOff": "20",    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "36ACB48C-438D-F241",    # ID номенклатуры
+    #                 "groupId": "BEA57842-935",    # ID группы номенклатуры
+    #                 "groupName": "Стейки",    # Наименование группы номенклатуры
+    #                 "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
+    #                 "price": 1300,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
+    #             },
+    #             {
+    #                 "amount": 1    # Количество
+    #                 "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
+    #                 "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
+    #                 "groupName":"Салаты\/Закуски",
+    #                 "name":"Салат с розовыми помидорами и домашним сыром 270гр",
+    #                 "price":390,
+    #                 "priceWithDiscount":390,
+    #             }
+    #         ]
+    #     }
+    #     :return:
+    #     Пример return:
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._update_order(
+    #         type="cardNumber",
+    #         id=card_number,
+    #         order=order
+    #     )
+    #
+    # def _update_order_by_phone(self, phone: str, order: CardLoyaltyOrder.Order) -> dict:
+    #     """
+    #     Обновить заказ по телефону
+    #
+    #     :param phone: номер телефона
+    #     :param order: параметры заказа
+    #     Пример order:
+    #     {
+    #         "guid": "2-43F2-4148-A264-8787414DC88",    # ID транзакции
+    #         "number": "005",    # Номер транзакции
+    #         "date": "2020-02-18 18:18:18",    # Дата транзакции
+    #         "sum": 1690,    # Сумма транзакции без скидки
+    #         "sumDiscount": 1690,    # Сумма транзакции со скидкой
+    #         "bonusAdd": "0",    # Начислено бонусов
+    #         "bonusWriteOff": "20",    # Списано бонусов
+    #         "depositAdd": "0",    # Пополнение депозита
+    #         "depositWriteOff": "20",    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "36ACB48C-438D-F241",    # ID номенклатуры
+    #                 "groupId": "BEA57842-935",    # ID группы номенклатуры
+    #                 "groupName": "Стейки",    # Наименование группы номенклатуры
+    #                 "name": "Мексика\/Чойс 240\/30гр",    # Наименование номенклатуры
+    #                 "price": 1300,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 1300,    # Стоимость номенклатуры с учетом скидки
+    #             },
+    #             {
+    #                 "amount": 1    # Количество
+    #                 "nid":"7882EAF6-B08E-1041-8B8B-8F4CEDDB3B80",
+    #                 "groupId":"F2FD3F09-96D6-9441-99E5-FF65505F6980",
+    #                 "groupName":"Салаты\/Закуски",
+    #                 "name":"Салат с розовыми помидорами и домашним сыром 270гр",
+    #                 "price":390,
+    #                 "priceWithDiscount":390,
+    #             }
+    #         ]
+    #     }
+    #     :return:
+    #     Пример return:
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._update_order(
+    #         type="phone",
+    #         id=phone,
+    #         order=order
+    #     )
+    #
+    #
+    # def _update_return_cart_by_client_id(self, client_id: int, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по ID клиента
+    #
+    #     :param client_id: ID клиента
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
+    #                 "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
+    #                 "groupName": "Лимонады соб.\/пр-ва",
+    #                 "name": "Лимонад Малина-Маракуйя 400мл",
+    #                 "price": 200,
+    #                 "priceWithDiscount": 150,
+    #                 "amount": 1.0
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id транзакции
+    #         }
+    #     }
+    #     """
+    #     return self._update_return_cart(
+    #         type="clientId",
+    #         id=str(client_id),
+    #         cart=cart
+    #     )
+    #
+    # def _update_return_cart_by_card_barcode(self, card_barcode: str, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по токену / баркоду карты
+    #
+    #     :param card_barcode: токен / баркод карты
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
+    #                 "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
+    #                 "groupName": "Лимонады соб.\/пр-ва",
+    #                 "name": "Лимонад Малина-Маракуйя 400мл",
+    #                 "price": 200,
+    #                 "priceWithDiscount": 150,
+    #                 "amount": 1.0
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id транзакции
+    #         }
+    #     }
+    #     """
+    #     return self._update_return_cart(
+    #         type="cardBarcode",
+    #         id=card_barcode,
+    #         cart=cart
+    #     )
+    #
+    # def _update_return_cart_by_card_number(self, card_number: str, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по номеру карты
+    #
+    #     :param card_number: номер карты
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
+    #                 "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
+    #                 "groupName": "Лимонады соб.\/пр-ва",
+    #                 "name": "Лимонад Малина-Маракуйя 400мл",
+    #                 "price": 200,
+    #                 "priceWithDiscount": 150,
+    #                 "amount": 1.0
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id транзакции
+    #         }
+    #     }
+    #     """
+    #     return self._update_return_cart(
+    #         type="cardNumber",
+    #         id=card_number,
+    #         cart=cart
+    #     )
+    #
+    # def _update_return_cart_by_phone(self, phone: str, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по телефону
+    #
+    #     :param phone: номер телефона
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "B9AD56BF-9D5B-AE4C-BA8B-2D724E2FEFC7",
+    #                 "groupId": "AC977305-F43E-8049-A233-15487AC4392A",
+    #                 "groupName": "Лимонады соб.\/пр-ва",
+    #                 "name": "Лимонад Малина-Маракуйя 400мл",
+    #                 "price": 200,
+    #                 "priceWithDiscount": 150,
+    #                 "amount": 1.0
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id транзакции
+    #         }
+    #     }
+    #     """
+    #     return self._update_return_cart(
+    #         type="phone",
+    #         id=phone,
+    #         cart=cart
+    #     )
+    #
+    #
+    # def _return_cart_by_client_id(self, client_id: int, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по ID клиента
+    #
+    #     :param client_id: ID клиента
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "124",
+    #                 "groupId": "145",
+    #                 "groupName": "Мороженное",
+    #                 "name": "Мороженка",
+    #                 "price": 900.00,
+    #                 "priceWithDiscount": 900.00,
+    #                 "amount": 0.51
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._return_cart(
+    #         type="clientId",
+    #         id=str(client_id),
+    #         cart=cart
+    #     )
+    #
+    # def _return_cart_by_card_barcode(self, card_barcode: str, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по токену / баркоду карты
+    #
+    #     :param card_barcode: токен / баркод карты
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "124",
+    #                 "groupId": "145",
+    #                 "groupName": "Мороженное",
+    #                 "name": "Мороженка",
+    #                 "price": 900.00,
+    #                 "priceWithDiscount": 900.00,
+    #                 "amount": 0.51
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._return_cart(
+    #         type="cardBarcode",
+    #         id=card_barcode,
+    #         cart=cart
+    #     )
+    #
+    # def _return_cart_by_card_number(self, card_number: str, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по номеру карты
+    #
+    #     :param card_number: номер карты
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "124",
+    #                 "groupId": "145",
+    #                 "groupName": "Мороженное",
+    #                 "name": "Мороженка",
+    #                 "price": 900.00,
+    #                 "priceWithDiscount": 900.00,
+    #                 "amount": 0.51
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._return_cart(
+    #         type="cardNumber",
+    #         id=card_number,
+    #         cart=cart
+    #     )
+    #
+    # def _return_cart_by_phone(self, phone: str, cart: dict) -> dict:
+    #     """
+    #     Возврат товара по телефону
+    #
+    #     :param phone: номер телефона
+    #     :param cart: параметры товара
+    #     Пример cart:
+    #     {
+    #         "guid": "123",    # ID возврата
+    #         "number": "213",    # Номер возврата
+    #         "date": "2018-01-01 00:00:00",    # Дата возврата
+    #         "sum": 1200.00,    # Сумма возврата без скидки
+    #         "sumDiscount": 1100.00,    # Сумма возврата со скидкой
+    #         "bonusAdd": 200.00,    # Начислено бонусов
+    #         "bonusWriteOff": 200.00,    # Списано бонусов
+    #         "depositAdd": 0.00,    # Пополнение депозита
+    #         "depositWriteOff": 0.00,    # Списание с депозита
+    #         "cart":
+    #         [
+    #             {
+    #                 "nid": "123",    # ID номенклатуры
+    #                 "groupId": "145",    # ID группы номенклатуры
+    #                 "groupName": "Печенье",    # Наименование группы номенклатуры
+    #                 "name": "Печенька",    # Наименование номенклатуры
+    #                 "price": 100.00,    # Стоимость номенклатуры
+    #                 "priceWithDiscount": 90.00,    # Стоимость номенклатуры с учетом скидки
+    #                 "amount": 1.0    # Количество
+    #             },
+    #             {
+    #                 "nid": "124",
+    #                 "groupId": "145",
+    #                 "groupName": "Мороженное",
+    #                 "name": "Мороженка",
+    #                 "price": 900.00,
+    #                 "priceWithDiscount": 900.00,
+    #                 "amount": 0.51
+    #             }
+    #         ]
+    #     }
+    #
+    #     :return:
+    #     Пример return
+    #     {
+    #         "response":
+    #         {
+    #             "guid": "123"    # id возврата
+    #         }
+    #     }
+    #     """
+    #     return self._return_cart(
+    #         type="phone",
+    #         id=phone,
+    #         cart=cart
+    #     )
